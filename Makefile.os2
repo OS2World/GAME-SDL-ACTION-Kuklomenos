@@ -24,16 +24,16 @@ WARNFLAGS = -Wall \
 override CFLAGS   = -Zomf -Zmt -O2 -MMD -MP $(WARNFLAGS) \
                     -Icompat \
                     -Isrc \
-                    -IC:/usr/include \
-                    -IC:/usr/include/SDL2 \
+                    -I/@unixroot/usr/include \
+                    -I/@unixroot/usr/include/SDL2 \
                     $(DEFINES)
 
 override CXXFLAGS = $(CFLAGS) -Wno-literal-suffix -std=c++11
 
 LDFLAGS  = -Zomf -Zmt -Zstack 512
 
-LIBS     = C:/usr/lib/SDL2_dll.a \
-           C:/usr/lib/SDL2_mixer_dll.a
+LIBS     = /@unixroot/usr/lib/SDL2_dll.a \
+           /@unixroot/usr/lib/SDL2_mixer_dll.a
 
 TARGET   = kuklomenos.exe
 
@@ -55,9 +55,9 @@ $(TARGET): $(OBJS) src/kuklomenos.def
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 clean:
-	-del /Q src\*.obj src\*.d 2>nul
-	-del /Q *.d *.obj 2>nul
-	-del /Q $(TARGET) 2>nul
+	-rm -f src/*.obj src/*.d
+	-rm -f *.d *.obj
+	-rm -f $(TARGET)
 
 .PHONY: all clean
 
