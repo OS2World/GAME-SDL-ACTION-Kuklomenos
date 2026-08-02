@@ -1,0 +1,174 @@
+Kuklomenos 0.4.5 - ArcaOS / OS/2 Port
+======================================
+
+
+DESCRIPTION
+-----------
+Kuklomenos is an abstract arcade shooter. Defend triangular Nodes from
+encroaching Blobs of Evil using three colours of shot and Capture Pods.
+Destroy four of six Nodes before Evil extracts their power - the only way.
+
+This is the ArcaOS / OS/2 port, built with GCC 9.2 (kLIBC) and SDL2.
+
+
+PORT STATUS
+-----------
+  Windowed mode   : Working
+  Fullscreen mode : Not supported
+  Sound           : Working  (requires SDL2_mixer with OGG support)
+  Keyboard        : Working
+  High scores     : Local ratings only  (no network upload)
+
+
+REQUIREMENTS
+------------
+ArcaOS 5.x, or OS/2 Warp 4.x with the kLIBC runtime.
+
+The following DLLs must be on the LIBPATH or in the game directory:
+
+  SDL2200.DLL     SDL2 base library
+  SDL2M200.DLL    SDL2_mixer  (sound / OGG playback)
+
+Install via the ArcaOS package manager:
+
+  yum install SDL2 SDL2_mixer
+
+
+INSTALLATION
+------------
+1. Extract the archive to any directory, e.g.:
+
+     C:\Games\Kuklomenos\
+
+2. Confirm the directory contains:
+
+     kuklomenos.exe
+     fonts\10x20.fnt    (required for display)
+     fonts\7x13.fnt     (required for display)
+     sounds\*.ogg       (required for sound)
+
+3. Ensure the SDL2 DLLs listed above are on the LIBPATH.
+
+   If they are not installed system-wide, copy them into the game directory.
+
+
+RUNNING
+-------
+The game must be started from its own directory so it can locate fonts\
+and sounds\.  Use a CMD script or change directory first:
+
+     cd C:\Games\Kuklomenos
+     kuklomenos.exe
+
+To launch from the Workplace Shell, create a program object and set the
+working directory to the game folder.
+
+Command-line options:
+
+     kuklomenos.exe --help
+
+Common options:
+
+     -W <n>   Window width  (default: 1024)
+     -H <n>   Window height (default: 768)
+     -b <n>   Colour depth in bpp
+     -f <n>   Target frames per second (default: 30)
+     -r <n>   Starting rating
+     --noantialias   Disable anti-aliasing
+     --nosound       Disable sound
+
+
+CONFIGURATION
+-------------
+Permanent settings are saved to kuklomenosrc.txt in the game directory,
+or to ~/.kuklomenosrc if the HOME environment variable is set.
+
+Press Escape during play to open the in-game menu where graphics,
+sound, and key bindings can be configured.
+
+To reset to defaults, delete kuklomenosrc.txt and restart the game.
+
+
+CONTROLS
+--------
+  Left / Right          Turn
+  Up                    Zoom out (de-aim)
+  Down                  De-aim
+  1                     Fire green shot
+  2                     Fire yellow shot
+  3                     Fire red shot
+  4                     Launch Capture Pod
+  P                     Pause / unpause
+  Q                     Quit
+  Escape                Menu
+  S                     Toggle sound
+  Z                     Toggle zoom
+  R                     Toggle rotation
+  G                     Toggle grid
+  A / Shift+A           Increase / decrease anti-aliasing
+  [ / ]                 Decrease / increase FPS limit
+  F12                   Screenshot (screenshot.bmp)
+
+
+KNOWN LIMITATIONS
+-----------------
+- Fullscreen mode is not available in this port.
+- Mix_Stretch (pitch-shift effect) is stubbed out; audio plays at
+  normal pitch regardless of game speed.
+- No network high-score reporting (libcurl not available on OS/2).
+
+
+BUILDING FROM SOURCE
+--------------------
+Requirements:
+  GCC 9.2 with kLIBC      (from ArcaOS RPM repository)
+  SDL2 dev packages        SDL2-devel, SDL2_mixer-devel
+  GNU make
+
+Build steps (run on ArcaOS from the source root):
+
+  set EMXOMFLD_TYPE=WLINK
+  set EMXOMFLD_LINKER=wl.exe
+  set EMXOMFLD_PRELINK=0
+  make -f Makefile.os2
+
+Or use the provided build script:
+
+  compile-kuklomenos.cmd
+
+Source layout:
+
+  src\            Game source code (.cc / .h)
+  compat\SDL\     SDL1 -> SDL2 compatibility shim headers
+  fonts\          Bitmap font data (runtime asset)
+  sounds\         OGG audio files (runtime asset)
+
+
+DISTRIBUTION FILE LIST
+----------------------
+Minimum set of files required to run the game:
+
+  kuklomenos.exe
+  fonts\10x20.fnt
+  fonts\7x13.fnt
+  sounds\hum.ogg
+  sounds\invdie.ogg
+  sounds\invhit.ogg
+  sounds\mutilation.ogg
+  sounds\primed.ogg
+  sounds\shield.ogg
+  sounds\shot.ogg
+  sounds\spark.ogg
+
+
+LICENSE
+-------
+GNU General Public License v3.  See COPYING for the full license text.
+
+  Copyright (C) 2008-2009  Martin Bays
+
+
+LINKS
+-----
+https://github.com/OS2World/GAME-SDL-ACTION-Kuklomenos
+

@@ -1,0 +1,65 @@
+CC  = gcc
+CXX = g++
+
+DEFINES = -DSOUND \
+          -DPACKAGE=\"kuklomenos\" \
+          -DPACKAGE_NAME=\"Kuklomenos\" \
+          -DVERSION=\"0.4.5\" \
+          -DIS_OS2_HOST
+
+WARNFLAGS = -Wall \
+            -Wno-unused-variable \
+            -Wno-unused-but-set-variable \
+            -Wno-deprecated-declarations \
+            -Wno-dangling-else -Wno-parentheses \
+            -Wno-stringop-truncation -Wno-stringop-overflow \
+            -Wno-format-truncation -Wno-array-bounds \
+            -Wno-sequence-point \
+            -Wno-sign-compare \
+            -Wno-narrowing
+
+# -Icompat: <SDL/SDL.h> resolves to compat/SDL/SDL.h (SDL1->SDL2 shim)
+# -Isrc:    <config.h> and cross-file includes resolve inside src\
+# override: prevent env-var CFLAGS/CXXFLAGS from silently replacing these
+override CFLAGS   = -Zomf -Zmt -O2 -MMD -MP $(WARNFLAGS) \
+                    -Icompat \
+                    -Isrc \
+                    -IC:/usr/include \
+                    -IC:/usr/include/SDL2 \
+                    $(DEFINES)
+
+override CXXFLAGS = $(CFLAGS) -Wno-literal-suffix -std=c++11
+
+LDFLAGS  = -Zomf -Zmt -Zstack 512
+
+LIBS     = C:/usr/lib/SDL2_dll.a \
+           C:/usr/lib/SDL2_mixer_dll.a
+
+TARGET   = kuklomenos.exe
+
+SRCS = \
+    src/ai.cc src/background.cc src/clock.cc src/collision.cc src/conffile.cc \
+    src/coords.cc src/data.cc src/geom.cc src/gfx.cc src/invaders.cc \
+    src/keybindings.cc src/main.cc src/menu.cc src/node.cc src/overlay.cc \
+    src/player.cc src/random.cc src/settings.cc src/shot.cc src/sound.cc \
+    src/state.cc src/SDL_gfxPrimitivesDirty.cc
+
+OBJS = $(SRCS:.cc=.obj)
+
+all: $(TARGET)
+
+$(TARGET): $(OBJS) src/kuklomenos.def
+	$(CXX) $(LDFLAGS) -o $@ $(OBJS) $(LIBS) src/kuklomenos.def
+
+%.obj: %.cc
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
+
+clean:
+	-del /Q src\*.obj src\*.d 2>nul
+	-del /Q *.d *.obj 2>nul
+	-del /Q $(TARGET) 2>nul
+
+.PHONY: all clean
+
+DEPFILES = $(OBJS:.obj=.d)
+-include $(DEPFILES)
