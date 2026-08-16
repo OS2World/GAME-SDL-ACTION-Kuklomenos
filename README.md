@@ -7,7 +7,9 @@ Original game by Martin Bays (GPLv3, 2008–2009).
 This repository contains the **ArcaOS / OS/2 port** built with GCC 9.2 and SDL2.
 
 For gameplay details and command-line options see [README](README).  
-For OS/2-specific build and installation instructions see [kuklomenos_os2.txt](kuklomenos_os2.txt).
+For OS/2-specific build and installation instructions see [kuklomenos_os2.txt](/doc/kuklomenos_os2.txt).
+
+![Kuklomenos ScreenShot](/doc/Kuklomenos.png)
 
 ---
 
